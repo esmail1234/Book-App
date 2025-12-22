@@ -10,7 +10,7 @@ class HomeView extends StatelessWidget {
         child: Column(
           children: [
             Stack(
-              clipBehavior: Clip.none, // مهم جداً عشان تسمح بخروج الصورة
+              clipBehavior: Clip.none,
               children: [
                 Container(
                   height: 450,
