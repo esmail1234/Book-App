@@ -1,11 +1,20 @@
 import 'package:book_app/core/widgets/custom_loginbotton.dart';
 import 'package:book_app/core/widgets/custom_textform.dart';
+import 'package:book_app/features/login/login_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../register/register_view.dart';
 
-class LoginView extends StatelessWidget {
+class LoginView extends StatefulWidget {
   const LoginView({super.key});
+
+  @override
+  State<LoginView> createState() => _LoginViewState();
+}
+
+class _LoginViewState extends State<LoginView> {
+  final LoginController controller = Get.put(LoginController());
+
 
   @override
   Widget build(BuildContext context) {
@@ -27,91 +36,119 @@ class LoginView extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
-          children: [
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const SizedBox(height: 20),
-                    const Text(
-                      "Please fill your details to login.",
-                      style: TextStyle(fontSize: 16, color: Color(0xFF252525)),
-                    ),
-
-                    const SizedBox(height: 30),
-
-                    const CustomTextForm(
-                      labelText: "Username/Email",
-                      icon: Icons.email,
-                      obscureText: false,
-                      keyboardType: TextInputType.emailAddress,
-                    ),
-
-                    const SizedBox(height: 30),
-
-                    const CustomTextForm(
-                      labelText: "Password",
-                      icon: Icons.lock,
-                      obscureText: true,
-                      keyboardType: TextInputType.text,
-                    ),
-
-                    const SizedBox(height: 40),
-
-                    CustomLoginbotton(
-                      text: "Login",
-                      onPressed: () {
-                        // Login action
-                      },
-                    ),
-
-                    const SizedBox(height: 20),
-
-                    TextButton(
-                      onPressed: (){
-
-                      },
-                      child: Text(
-                        "Forgot Password?",
+        child: Form(
+          key: controller.formKey,
+          child: Column(
+            children: [
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const SizedBox(height: 20),
+                      const Text(
+                        "Please fill your details to login.",
                         style: TextStyle(
-                          fontSize: 14,
-                          color: Color(0xFF121212),
-                          fontWeight: FontWeight.w700,
+                          fontSize: 16,
+                          color: Color(0xFF252525),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
 
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text(
-                  "Don't have an account? ",
-                  style: TextStyle(fontSize: 14, color: Color(0xFF252525)),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Get.to(() => const RegisterView());
-                  },
-                  child: const Text(
-                    "Register",
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Color(0xFF121212),
-                      fontWeight: FontWeight.w700,
-                    ),
+                      const SizedBox(height: 30),
+
+                      CustomTextForm(
+                        controller: controller.emailController,
+                        labelText: "Email",
+                        icon: Icons.email,
+                        obscureText: false,
+                        keyboardType: TextInputType.emailAddress,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter your email';
+                          }
+                          if (!GetUtils.isEmail(value)) {
+                            return 'Please enter a valid email';
+                          }
+                          return null;
+                        },
+                      ),
+
+                      const SizedBox(height: 30),
+
+                      CustomTextForm(
+                        controller: controller.passwordController,
+                        labelText: "Password",
+                        icon: Icons.lock,
+                        obscureText: true,
+                        keyboardType: TextInputType.text,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter your password';
+                          }
+                          if (value.length < 6) {
+                            return 'Password must be at least 6 characters long';
+                          }
+                          return null;
+                        },
+                      ),
+
+                      const SizedBox(height: 40),
+
+                      Obx(
+                        () => CustomLoginbotton(
+                          text: controller.isLoading.value
+                              ? "Loading..."
+                              : "Login",
+                          onPressed: controller.isLoading.value
+                              ? null
+                              : controller.login,
+                        ),
+                      ),
+
+                      const SizedBox(height: 20),
+
+                      TextButton(
+                        onPressed: controller.goToForgotPassword,
+                        child: const Text(
+                          "Forgot Password?",
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Color(0xFF121212),
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ],
-            ),
+              ),
 
-            const SizedBox(height: 40), 
-          ],
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    "Don't have an account? ",
+                    style: TextStyle(fontSize: 14, color: Color(0xFF252525)),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Get.to(() => const RegisterView());
+                    },
+                    child: const Text(
+                      "Register",
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Color(0xFF121212),
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 40),
+            ],
+          ),
         ),
       ),
     );
