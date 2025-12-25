@@ -15,7 +15,6 @@ class LoginView extends StatefulWidget {
 class _LoginViewState extends State<LoginView> {
   final LoginController controller = Get.put(LoginController());
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
