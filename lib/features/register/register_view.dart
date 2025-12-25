@@ -97,7 +97,7 @@ class RegisterView extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: () {
-                    Get.to(() => const LoginView());
+                    Get.to(() =>  const LoginView());
                   },
                   child: const Text(
                     "Sign In",
