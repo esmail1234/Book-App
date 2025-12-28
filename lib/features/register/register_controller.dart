@@ -4,38 +4,49 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class LoginController extends GetxController {
+class RegisterController extends GetxController {
+  final userController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
 
-  final loginFormKey = GlobalKey<FormState>();
+  final registerFormKey = GlobalKey<FormState>();
 
   final isLoading = false.obs;
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  void login() async {
+  void register() async {
   FocusManager.instance.primaryFocus?.unfocus();
 
-  if (!loginFormKey.currentState!.validate()) return;
+  if (!registerFormKey.currentState!.validate()) return;
 
   isLoading.value = true;
 
   try {
-    await _auth.signInWithEmailAndPassword(
+    UserCredential userCredential =
+        await _auth.createUserWithEmailAndPassword(
       email: emailController.text.trim(),
       password: passwordController.text.trim(),
     );
 
-    Get.offAllNamed('/home');
+    Get.snackbar(
+      "Success",
+      "Registration Successful",
+      snackPosition: SnackPosition.BOTTOM,
+    );
 
+    Get.offAllNamed('/login'); 
+
+    print("User Registered: ${userCredential.user!.email}");
   } on FirebaseAuthException catch (e) {
-    String message = 'Login failed';
-
-    if (e.code == 'user-not-found') {
-      message = 'No user found for that email';
-    } else if (e.code == 'wrong-password') {
-      message = 'Wrong password provided';
+    String message = 'Registration failed';
+    if (e.code == 'email-already-in-use') {
+      message = 'Email is already in use';
+    } else if (e.code == 'weak-password') {
+      message = 'Password is too weak';
+    } else if (e.code == 'invalid-email') {
+      message = 'Invalid email address';
     }
 
     Get.snackbar(
@@ -48,7 +59,7 @@ class LoginController extends GetxController {
   } catch (e) {
     Get.snackbar(
       "Error",
-      "An unexpected error occurred",
+      "Something went wrong",
       snackPosition: SnackPosition.BOTTOM,
       backgroundColor: Colors.redAccent,
       colorText: Colors.white,
@@ -59,19 +70,16 @@ class LoginController extends GetxController {
 }
 
 
-
   @override
   void onClose() {
+    userController.dispose();
     emailController.dispose();
     passwordController.dispose();
+    confirmPasswordController.dispose();
     super.onClose();
   }
 
-  void goToForgotPassword() {
-    Get.snackbar(
-      'Info',
-      'Forgot Password screen not implemented yet',
-      snackPosition: SnackPosition.BOTTOM,
-    );
+  void goToLogin() {
+    Get.back();
   }
 }

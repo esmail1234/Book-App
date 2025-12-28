@@ -1,12 +1,12 @@
+import 'package:book_app/features/welcome/welcome_page.dart';
 import 'package:get/get.dart';
-import '../home/home_view.dart';
 
 class SplashController extends GetxController {
   @override
   void onInit() {
     super.onInit();
     Future.delayed(const Duration(seconds: 3), () {
-      Get.offAll(() => const HomeView()); 
+      Get.offAll(() => const WelcomePage()); 
     });
   }
 }

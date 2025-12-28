@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-class CustomTextForm extends StatelessWidget {
+class CustomTextForm extends StatefulWidget {
   final String labelText;
   final IconData icon;
-  final bool obscureText;
+  final bool isPassword;
   final TextInputType keyboardType;
 
   final TextEditingController? controller;
@@ -15,7 +15,7 @@ class CustomTextForm extends StatelessWidget {
     super.key,
     required this.labelText,
     required this.icon,
-    this.obscureText = false,
+    this.isPassword = false,
     this.keyboardType = TextInputType.text,
     this.controller,
     this.validator,
@@ -24,18 +24,41 @@ class CustomTextForm extends StatelessWidget {
   });
 
   @override
+  State<CustomTextForm> createState() => _CustomTextFormState();
+}
+
+class _CustomTextFormState extends State<CustomTextForm> {
+  bool isPasswordHidden = true;
+
+  @override
   Widget build(BuildContext context) {
     return TextFormField(
-      controller: controller,
-      validator: validator,
-      onChanged: onChanged,
-      onSaved: onSaved,
-      obscureText: obscureText,
-      keyboardType: keyboardType,
+      controller: widget.controller,
+      validator: widget.validator,
+      onChanged: widget.onChanged,
+      onSaved: widget.onSaved,
+      obscureText: widget.isPassword ? isPasswordHidden : false,
+      keyboardType: widget.keyboardType,
       decoration: InputDecoration(
-        labelText: labelText,
-        prefixIcon: Icon(icon),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+        labelText: widget.labelText,
+        prefixIcon: Icon(widget.icon),
+        suffixIcon: widget.isPassword
+            ? IconButton(
+                icon: Icon(
+                  isPasswordHidden
+                      ? Icons.visibility_off
+                      : Icons.visibility,
+                ),
+                onPressed: () {
+                  setState(() {
+                    isPasswordHidden = !isPasswordHidden;
+                  });
+                },
+              )
+            : null,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
       ),
     );
   }
