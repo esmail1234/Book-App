@@ -5,15 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../register/register_view.dart';
 
-class LoginView extends StatefulWidget {
+class LoginView extends GetView<LoginController> {
   const LoginView({super.key});
-
-  @override
-  State<LoginView> createState() => _LoginViewState();
-}
-
-class _LoginViewState extends State<LoginView> {
-  final LoginController controller = Get.put(LoginController());
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +29,8 @@ class _LoginViewState extends State<LoginView> {
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Form(
-          key: controller.formKey,
+          key: controller.loginFormKey,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           child: Column(
             children: [
               Expanded(
@@ -45,6 +39,7 @@ class _LoginViewState extends State<LoginView> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       const SizedBox(height: 20),
+
                       const Text(
                         "Please fill your details to login.",
                         style: TextStyle(
@@ -59,13 +54,12 @@ class _LoginViewState extends State<LoginView> {
                         controller: controller.emailController,
                         labelText: "Email",
                         icon: Icons.email,
-                        obscureText: false,
                         keyboardType: TextInputType.emailAddress,
                         validator: (value) {
-                          if (value == null || value.isEmpty) {
+                          if (value?.isEmpty ?? true) {
                             return 'Please enter your email';
                           }
-                          if (!GetUtils.isEmail(value)) {
+                          if (!GetUtils.isEmail(value!)) {
                             return 'Please enter a valid email';
                           }
                           return null;
@@ -78,14 +72,13 @@ class _LoginViewState extends State<LoginView> {
                         controller: controller.passwordController,
                         labelText: "Password",
                         icon: Icons.lock,
-                        obscureText: true,
-                        keyboardType: TextInputType.text,
+                        isPassword: true,
                         validator: (value) {
-                          if (value == null || value.isEmpty) {
+                          if (value?.isEmpty ?? true) {
                             return 'Please enter your password';
                           }
-                          if (value.length < 6) {
-                            return 'Password must be at least 6 characters long';
+                          if (value!.length < 6) {
+                            return 'Password must be at least 6 characters';
                           }
                           return null;
                         },
@@ -112,7 +105,6 @@ class _LoginViewState extends State<LoginView> {
                           "Forgot Password?",
                           style: TextStyle(
                             fontSize: 14,
-                            color: Color(0xFF121212),
                             fontWeight: FontWeight.w700,
                           ),
                         ),
@@ -127,17 +119,17 @@ class _LoginViewState extends State<LoginView> {
                 children: [
                   const Text(
                     "Don't have an account? ",
-                    style: TextStyle(fontSize: 14, color: Color(0xFF252525)),
+                    style: TextStyle(fontSize: 14),
                   ),
                   GestureDetector(
                     onTap: () {
-                      Get.to(() => const RegisterView());
+                      FocusManager.instance.primaryFocus?.unfocus();
+                      Get.offAll(() => const RegisterView());
                     },
                     child: const Text(
                       "Register",
                       style: TextStyle(
                         fontSize: 14,
-                        color: Color(0xFF121212),
                         fontWeight: FontWeight.w700,
                       ),
                     ),
