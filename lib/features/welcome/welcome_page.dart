@@ -1,4 +1,4 @@
-import 'package:book_app/core/widgets/custom_loginbotton.dart';
+import 'package:book_app/core/widgets/custom_login_buttom.dart';
 import 'package:book_app/features/login/login_binding.dart';
 import 'package:book_app/features/login/login_view.dart';
 import 'package:book_app/features/register/register_binding.dart';
@@ -62,7 +62,7 @@ class WelcomePage extends StatelessWidget {
 
               const SizedBox(height: 80),
 
-              CustomLoginbotton(
+              CustomLoginButton(
                 onPressed: () {
                   Get.to(() => const LoginView(), binding: LoginBinding());
                 },

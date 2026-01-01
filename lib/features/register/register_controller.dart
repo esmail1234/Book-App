@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print
+
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -24,8 +24,7 @@ class RegisterController extends GetxController {
   isLoading.value = true;
 
   try {
-    UserCredential userCredential =
-        await _auth.createUserWithEmailAndPassword(
+    await _auth.createUserWithEmailAndPassword(
       email: emailController.text.trim(),
       password: passwordController.text.trim(),
     );
@@ -36,9 +35,9 @@ class RegisterController extends GetxController {
       snackPosition: SnackPosition.BOTTOM,
     );
 
-    Get.offAllNamed('/login'); 
+    Get.offAllNamed('/home'); 
 
-    print("User Registered: ${userCredential.user!.email}");
+
   } on FirebaseAuthException catch (e) {
     String message = 'Registration failed';
     if (e.code == 'email-already-in-use') {

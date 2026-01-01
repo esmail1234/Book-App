@@ -1,5 +1,6 @@
-import 'package:book_app/core/widgets/custom_loginbotton.dart';
+import 'package:book_app/core/widgets/custom_login_buttom.dart';
 import 'package:book_app/core/widgets/custom_textform.dart';
+import 'package:book_app/features/login/login_binding.dart';
 import 'package:book_app/features/login/login_view.dart';
 import 'package:book_app/features/register/register_controller.dart';
 import 'package:flutter/material.dart';
@@ -118,7 +119,7 @@ class RegisterView extends GetView<RegisterController> {
                       const SizedBox(height: 40),
 
                       Obx(
-                        () => CustomLoginbotton(
+                        () => CustomLoginButton(
                           text: controller.isLoading.value
                               ? "Loading..."
                               : "Sign Up",
@@ -142,13 +143,11 @@ class RegisterView extends GetView<RegisterController> {
                   GestureDetector(
                     onTap: () {
                       FocusManager.instance.primaryFocus?.unfocus();
-                      Get.offAll(() => const LoginView());
+                      Get.off(() => const LoginView(), binding: LoginBinding());
                     },
                     child: const Text(
                       "Sign In",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w700,
-                      ),
+                      style: TextStyle(fontWeight: FontWeight.w700),
                     ),
                   ),
                 ],
