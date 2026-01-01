@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class CustomLoginbotton extends StatelessWidget {
+class CustomLoginButton extends StatelessWidget {
   final String text;
   final Color backgroundColor;
   final Color textColor;
   final VoidCallback? onPressed;
 
-  const CustomLoginbotton({
+  const CustomLoginButton({
     super.key,
     this.text = "Get Started",
     this.backgroundColor = const Color(0xFF121212),

@@ -6,7 +6,8 @@ import 'package:book_app/features/splash/splash_binding.dart';
 import 'package:book_app/features/welcome/welcome_page.dart';
 import 'package:get/get.dart';
 import '../../features/splash/splash_view.dart';
-import '../../features/home/home_view.dart';
+import 'package:book_app/core/widgets/main_bottom_nav_bar.dart';
+import 'package:book_app/core/controllers/nav_controller.dart';
 import 'app_routes.dart';
 
 class AppPages {
@@ -22,7 +23,10 @@ class AppPages {
     ),
     GetPage(
       name: Routes.home,
-      page: () => HomeView()
+      page: () => ModernBottomNavBar(),
+      binding: BindingsBuilder(() {
+        Get.put(NavController());
+      }),
     ),
     GetPage(
       name: Routes.login,
@@ -34,5 +38,6 @@ class AppPages {
       page: () => RegisterView(),
       binding: RegisterBinding(),
     ),
+    
   ];
 }
