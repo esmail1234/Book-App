@@ -1,8 +1,10 @@
 // widgets/books_section.dart
 // ignore_for_file: deprecated_member_use
 
+import 'package:book_app/features/details/book_details_page.dart';
 import 'package:flutter/material.dart';
 import 'package:book_app/data/models/book_model.dart';
+import 'package:get/get.dart';
 
 enum BooksSectionType { horizontal, grid }
 
@@ -27,11 +29,19 @@ class BooksSection extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Text(title,
-            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF2D3142))),
+          child: Text(
+            title,
+            style: const TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF2D3142),
+            ),
+          ),
         ),
         const SizedBox(height: 16),
-        type == BooksSectionType.horizontal ? _buildHorizontalList() : _buildGrid(),
+        type == BooksSectionType.horizontal
+            ? _buildHorizontalList()
+            : _buildGrid(),
       ],
     );
   }
@@ -50,7 +60,9 @@ class BooksSection extends StatelessWidget {
   }
 
   Widget _buildGrid() {
-    final itemCount = maxItems != null && books.length > maxItems! ? maxItems! : books.length;
+    final itemCount = maxItems != null && books.length > maxItems!
+        ? maxItems!
+        : books.length;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: GridView.builder(
@@ -101,20 +113,37 @@ class BookCard extends StatelessWidget {
   Widget _buildCover() {
     return Stack(
       children: [
-        ClipRRect(
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-          child: book.thumbnail.isNotEmpty
-              ? Image.network(book.thumbnail, width: 150, height: 180, fit: BoxFit.cover,
-                  errorBuilder: (c, e, s) => _placeholder())
-              : _placeholder(),
+        InkWell(
+          onTap: () {
+            Get.to(BookDetailsPage(book: book));
+          },
+          child: ClipRRect(
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+            child: book.thumbnail.isNotEmpty
+                ? Image.network(
+                    book.thumbnail,
+                    width: 150,
+                    height: 180,
+                    fit: BoxFit.cover,
+                    errorBuilder: (c, e, s) => _placeholder(),
+                  )
+                : _placeholder(),
+          ),
         ),
         Positioned(
           top: 8,
           right: 8,
           child: Container(
             padding: const EdgeInsets.all(6),
-            decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle),
-            child: const Icon(Icons.favorite_border, size: 16, color: Color(0xFF6C63FF)),
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              shape: BoxShape.circle,
+            ),
+            child: const Icon(
+              Icons.favorite_border,
+              size: 16,
+              color: Color(0xFF6C63FF),
+            ),
           ),
         ),
       ],
@@ -127,21 +156,33 @@ class BookCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(book.title, maxLines: 2, overflow: TextOverflow.ellipsis,
-            style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold, height: 1.2)),
+          Text(
+            book.title,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: const TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.bold,
+              height: 1.2,
+            ),
+          ),
           const SizedBox(height: 4),
-          Text(book.authors, maxLines: 1, overflow: TextOverflow.ellipsis,
-            style: TextStyle(color: Colors.grey[600], fontSize: 11)),
+          Text(
+            book.authors,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(color: Colors.grey[600], fontSize: 11),
+          ),
         ],
       ),
     );
   }
 
   Widget _placeholder() => Container(
-        height: 180,
-        color: Colors.grey[100],
-        child: const Icon(Icons.book, size: 40, color: Colors.grey),
-      );
+    height: 180,
+    color: Colors.grey[100],
+    child: const Icon(Icons.book, size: 40, color: Colors.grey),
+  );
 }
 
 class CompactBookCard extends StatelessWidget {
@@ -166,12 +207,23 @@ class CompactBookCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
-            child: ClipRRect(
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-              child: book.thumbnail.isNotEmpty
-                  ? Image.network(book.thumbnail, width: double.infinity, fit: BoxFit.cover,
-                      errorBuilder: (c, e, s) => _placeholder())
-                  : _placeholder(),
+            child: InkWell(
+              onTap: () {
+                Get.to(BookDetailsPage(book: book));
+              },
+              child: ClipRRect(
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(16),
+                ),
+                child: book.thumbnail.isNotEmpty
+                    ? Image.network(
+                        book.thumbnail,
+                        width: double.infinity,
+                        fit: BoxFit.cover,
+                        errorBuilder: (c, e, s) => _placeholder(),
+                      )
+                    : _placeholder(),
+              ),
             ),
           ),
           Padding(
@@ -179,11 +231,23 @@ class CompactBookCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(book.title, maxLines: 2, overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, height: 1.2)),
+                Text(
+                  book.title,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                    height: 1.2,
+                  ),
+                ),
                 const SizedBox(height: 4),
-                Text(book.authors, maxLines: 1, overflow: TextOverflow.ellipsis,
-                  style: TextStyle(color: Colors.grey[600], fontSize: 10)),
+                Text(
+                  book.authors,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(color: Colors.grey[600], fontSize: 10),
+                ),
               ],
             ),
           ),
@@ -193,7 +257,7 @@ class CompactBookCard extends StatelessWidget {
   }
 
   Widget _placeholder() => Container(
-        color: Colors.grey[100],
-        child: const Center(child: Icon(Icons.book, size: 40, color: Colors.grey)),
-      );
+    color: Colors.grey[100],
+    child: const Center(child: Icon(Icons.book, size: 40, color: Colors.grey)),
+  );
 }
