@@ -144,7 +144,7 @@ Follow these steps to run the project locally.
 
 Created by **[Your Name]** - feel free to contact me!
 
-- **Email**: [your.email@example.com](mailto:em5494282.email@example.com)
+- **Email**: [em5494282@gmail.com](mailto:em5494282@gmail.com)
 - **GitHub**: [github.com/yourusername](https://github.com/esmail1234)
 - **LinkedIn**: [linkedin.com/in/yourprofile](https://www.linkedin.com/in/esmail-mohamed-a57905282/)
 
