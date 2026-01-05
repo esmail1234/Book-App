@@ -1,4 +1,5 @@
 // widgets/category_books_view.dart
+import 'package:book_app/features/details/book_details_page.dart';
 import 'package:flutter/material.dart';
 import 'package:book_app/data/controllers/book_controller.dart';
 import 'package:book_app/data/models/book_model.dart';
@@ -136,7 +137,10 @@ class _CategoryBooksPageState extends State<CategoryBooksPage> {
               valueColor: AlwaysStoppedAnimation(Color(0xFF6C63FF)),
             ),
             SizedBox(height: 16),
-            Text('Loading books...', style: TextStyle(color: Colors.grey, fontSize: 15)),
+            Text(
+              'Loading books...',
+              style: TextStyle(color: Colors.grey, fontSize: 15),
+            ),
           ],
         ),
       ),
@@ -164,10 +168,17 @@ class _CategoryBooksPageState extends State<CategoryBooksPage> {
             const SizedBox(height: 24),
             const Text(
               'No books found',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF2D3142)),
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF2D3142),
+              ),
             ),
             const SizedBox(height: 8),
-            Text('Try another category', style: TextStyle(color: Colors.grey[500], fontSize: 14)),
+            Text(
+              'Try another category',
+              style: TextStyle(color: Colors.grey[500], fontSize: 14),
+            ),
           ],
         ),
       ),
@@ -235,12 +246,21 @@ class BookGridCard extends StatelessWidget {
   Widget _buildCover(BoxConstraints constraints, bool isSmall) {
     return Stack(
       children: [
-        ClipRRect(
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-          child: book.thumbnail.isNotEmpty
-              ? Image.network(book.thumbnail, width: double.infinity, fit: BoxFit.cover,
-                  errorBuilder: (c, e, s) => _placeholder())
-              : _placeholder(),
+        InkWell(
+          onTap: () {
+            Get.to(BookDetailsPage(book: book));
+          },
+          child: ClipRRect(
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+            child: book.thumbnail.isNotEmpty
+                ? Image.network(
+                    book.thumbnail,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                    errorBuilder: (c, e, s) => _placeholder(),
+                  )
+                : _placeholder(),
+          ),
         ),
         _buildCategoryBadge(constraints, isSmall),
         _buildFavoriteButton(isSmall),
@@ -282,8 +302,15 @@ class BookGridCard extends StatelessWidget {
       right: 6,
       child: Container(
         padding: EdgeInsets.all(isSmall ? 4 : 6),
-        decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle),
-        child: Icon(Icons.favorite_border, size: isSmall ? 14 : 16, color: color),
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          shape: BoxShape.circle,
+        ),
+        child: Icon(
+          Icons.favorite_border,
+          size: isSmall ? 14 : 16,
+          color: color,
+        ),
       ),
     );
   }
@@ -312,7 +339,10 @@ class BookGridCard extends StatelessWidget {
             book.authors,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(color: Colors.grey[600], fontSize: isSmall ? 9 : 10),
+            style: TextStyle(
+              color: Colors.grey[600],
+              fontSize: isSmall ? 9 : 10,
+            ),
           ),
         ],
       ),
@@ -320,7 +350,7 @@ class BookGridCard extends StatelessWidget {
   }
 
   Widget _placeholder() => Container(
-        color: Colors.grey[100],
-        child: Center(child: Icon(Icons.book, size: 40, color: Colors.grey[400])),
-      );
+    color: Colors.grey[100],
+    child: Center(child: Icon(Icons.book, size: 40, color: Colors.grey[400])),
+  );
 }

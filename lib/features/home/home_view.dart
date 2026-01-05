@@ -45,7 +45,7 @@ class HomeView extends StatelessWidget {
                       title: '✨ New Releases',
                       books: controller.books,
                       type: BooksSectionType.grid,
-                      maxItems: 6,
+                      maxItems: 10,
                     ),
                     const SizedBox(height: 100),
                   ],

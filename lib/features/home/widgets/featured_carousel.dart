@@ -1,6 +1,8 @@
 // widgets/featured_carousel.dart
+import 'package:book_app/features/details/book_details_page.dart';
 import 'package:flutter/material.dart';
 import 'package:book_app/data/models/book_model.dart';
+import 'package:get/get.dart';
 
 class FeaturedCarousel extends StatefulWidget {
   final List<BookModel> books;
@@ -36,8 +38,14 @@ class _FeaturedCarouselState extends State<FeaturedCarousel> {
       children: [
         const Padding(
           padding: EdgeInsets.symmetric(horizontal: 20),
-          child: Text('🔥 Trending Now',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF2D3142))),
+          child: Text(
+            '🔥 Trending Now',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF2D3142),
+            ),
+          ),
         ),
         const SizedBox(height: 16),
         SizedBox(
@@ -69,7 +77,9 @@ class _FeaturedCarouselState extends State<FeaturedCarousel> {
           height: 8,
           decoration: BoxDecoration(
             gradient: i == _currentPage
-                ? const LinearGradient(colors: [Color(0xFF6C63FF), Color(0xFF8B7FFF)])
+                ? const LinearGradient(
+                    colors: [Color(0xFF6C63FF), Color(0xFF8B7FFF)],
+                  )
                 : null,
             color: i == _currentPage ? null : Colors.grey[300],
             borderRadius: BorderRadius.circular(4),
@@ -93,7 +103,10 @@ class _FeaturedCard extends StatelessWidget {
       margin: EdgeInsets.symmetric(horizontal: 6, vertical: isActive ? 0 : 8),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [Color(0xFF6C63FF).withOpacity(0.9), Color(0xFF8B7FFF).withOpacity(0.8)],
+          colors: [
+            Color(0xFF6C63FF).withOpacity(0.9),
+            Color(0xFF8B7FFF).withOpacity(0.8),
+          ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -115,7 +128,7 @@ class _FeaturedCard extends StatelessWidget {
               padding: const EdgeInsets.all(20),
               child: Row(
                 children: [
-                  Expanded(flex: 3, child: _buildContent()),
+                  Expanded(flex: 3, child: _buildContent(context)),
                   const SizedBox(width: 12),
                   Expanded(flex: 2, child: _buildThumbnail()),
                 ],
@@ -142,7 +155,7 @@ class _FeaturedCard extends StatelessWidget {
     );
   }
 
-  Widget _buildContent() {
+  Widget _buildContent(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -153,21 +166,54 @@ class _FeaturedCard extends StatelessWidget {
             color: Colors.white.withOpacity(0.2),
             borderRadius: BorderRadius.circular(8),
           ),
-          child: Text(book.category,
-            style: const TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w600)),
+          child: Text(
+            book.category,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 10,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
         ),
         const SizedBox(height: 12),
-        Text(book.title, maxLines: 2, overflow: TextOverflow.ellipsis,
-          style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold, height: 1.3)),
+        Text(
+          book.title,
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            height: 1.3,
+          ),
+        ),
         const SizedBox(height: 6),
-        Text(book.authors, maxLines: 1, overflow: TextOverflow.ellipsis,
-          style: TextStyle(color: Colors.white.withOpacity(0.8), fontSize: 13)),
+        Text(
+          book.authors,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(color: Colors.white.withOpacity(0.8), fontSize: 13),
+        ),
         const Spacer(),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-          decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)),
-          child: const Text('Read Now',
-            style: TextStyle(color: Color(0xFF6C63FF), fontSize: 12, fontWeight: FontWeight.bold)),
+        GestureDetector(
+          onTap: () {
+            Get.to(() => BookDetailsPage(book: book));
+          },
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: const Text(
+              'View Details',
+              style: TextStyle(
+                color: Color(0xFF6C63FF),
+                fontSize: 12,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
         ),
       ],
     );
@@ -177,18 +223,22 @@ class _FeaturedCard extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(12),
       child: book.thumbnail.isNotEmpty
-          ? Image.network(book.thumbnail, height: 160, fit: BoxFit.cover,
-              errorBuilder: (c, e, s) => _placeholder())
+          ? Image.network(
+              book.thumbnail,
+              height: 160,
+              fit: BoxFit.cover,
+              errorBuilder: (c, e, s) => _placeholder(),
+            )
           : _placeholder(),
     );
   }
 
   Widget _placeholder() => Container(
-        height: 160,
-        decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.2),
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: const Icon(Icons.book, size: 40, color: Colors.white),
-      );
+    height: 160,
+    decoration: BoxDecoration(
+      color: Colors.white.withOpacity(0.2),
+      borderRadius: BorderRadius.circular(12),
+    ),
+    child: const Icon(Icons.book, size: 40, color: Colors.white),
+  );
 }
